@@ -1,0 +1,15 @@
+## first release
+this first release includes working version of the chess console game. This version includes the following features:
+- [x] Chess pieces can be moved on the board, captured, promoted, castled, en passant captured, checkmated, and stalemated.
+- [x] The game can be played against the computer.
+- [x] The game can be played against another player.
+- [x] The game can be played in a console window.
+- [x] The game has a set of illegal moves that the player cannot make.
+
+User Stories completed:
+- [x] As a user, I want to be able to play a game of chess against the computer.
+- [x] As a user, I want to be able to move the chess pieces on the board.
+- [x] As a user, I want to be able to see the chess pieces of the board in the console.
+- [x] As a user, I want to be able to win by checkmate, and lose by checkmate.
+- [x] As a user, I want to be able to win by stalemate, and lose by stalemate.
+- [x] As a user, I want to be able to win by castling,  and lose by castling.
