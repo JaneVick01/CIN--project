@@ -13,3 +13,10 @@ User Stories completed:
 - [x] As a user, I want to be able to win by checkmate, and lose by checkmate.
 - [x] As a user, I want to be able to win by stalemate, and lose by stalemate.
 - [x] As a user, I want to be able to win by castling,  and lose by castling.
+
+## Second release
+This second release includes a working version of the chess console game. This version has a lot of changes from the first release. This version includes changes to all pieces, the board, and the game. The strategy pattern has been included.
+
+User stories completed:
+- [x] As a user, I want to be able to choose the color of the pieces.
+- [x] As a user, I want to be able to play against another player on the same PC.
