@@ -1,18 +1,13 @@
 
-public abstract class Piece implements IChessPiece {
+public abstract class Piece {
 
 	private final Color color;
-
-	// set the move strategy for each piece
-	private MoveStrategy moveStrategy;
 
 	private final String ID;
 
 	private int x, y;
 
 	public boolean isFirstMove;
-
-	protected Board board = Board.getInstance();
 
 	public Piece(Color color, String ID, int startX, int startY) {
 		this.color = color;
@@ -21,11 +16,11 @@ public abstract class Piece implements IChessPiece {
 		this.y = startY;
 
 		if (this.getColor() == Color.WHITE) {
-			board.getWhite().add(this);
+			Board.white.add(this);
 		} else if (this.getColor() == Color.BLACK) {
-			board.getBlack().add(this);
+			Board.black.add(this);
 		}
-		board.setPiece(x, y, this);
+		Board.setPiece(x, y, this);
 	}
 
 	public String getID() {
@@ -51,7 +46,7 @@ public abstract class Piece implements IChessPiece {
 		return this.x;
 	}
 
-	public void setX(int newX) {
+	void setX(int newX) {
 		this.x = newX;
 	}
 
@@ -59,21 +54,11 @@ public abstract class Piece implements IChessPiece {
 		return this.y;
 	}
 
-	public void setY(int newY) {
+	void setY(int newY) {
 		this.y = newY;
 	}
 
-	public boolean getIsFirstMove() {
-		return this.isFirstMove;
-	}
-
-	public void setMoveStrategy(MoveStrategy moveStrategy) {
-		this.moveStrategy = moveStrategy;
-	}
-
-	public boolean possibleMove(int x, int y) {
-		return this.moveStrategy.possibleMove(x, y, this);
-	};
+	public abstract boolean possibleMove(int x, int y);
 
 	public int move(int x, int y, Piece other) {
 		if (this.possibleMove(x, y) != true) {
@@ -85,27 +70,27 @@ public abstract class Piece implements IChessPiece {
 		int originY = this.getY();
 
 		if (this.getColor() == Color.WHITE) {
-			board.getBlack().remove(other);
+			Board.black.remove(other);
 		} else {
-			board.getWhite().remove(other);
+			Board.white.remove(other);
 		}
 
-		board.setPiece(originX, originY, null);
-		board.setPiece(x, y, this);
+		Board.setPiece(originX, originY, null);
+		Board.setPiece(x, y, this);
 
 		boolean isFirstMoveOG = this.isFirstMove;
 		this.isFirstMove = false;
 
-		if (board.checkForCheck(color) == true) {
+		if (Board.checkForCheck(color) == true) {
 			if (other != null) {
 				if (this.getColor() == Color.WHITE) {
-					board.getBlack().add(other);
+					Board.black.add(other);
 				} else {
-					board.getWhite().add(other);
+					Board.white.add(other);
 				}
 			}
-			board.setPiece(originX, originY, this);
-			board.setPiece(x, y, other);
+			Board.setPiece(originX, originY, this);
+			Board.setPiece(x, y, other);
 			this.isFirstMove = isFirstMoveOG;
 
 			return -1;
@@ -114,14 +99,14 @@ public abstract class Piece implements IChessPiece {
 		if (this instanceof Pawn) {
 			char file = this.getID().charAt(4);
 			if (this.getColor() == Color.WHITE && y == 0) {
-				board.setPiece(x, y, null);
-				board.getWhite().remove(this);
-				Queen queen = new Queen(Color.WHITE, "queen" + file, x, y);
+				Board.setPiece(x, y, null);
+				Board.white.remove(this);
+				Queen yasQueen = new Queen(Color.WHITE, "queen" + file, x, y);
 				System.out.println("Pawn promoted!");
 			} else if (this.getColor() == Color.BLACK && y == 7) {
-				board.setPiece(x, y, null);
-				board.getBlack().remove(this);
-				Queen queen = new Queen(Color.BLACK, "queen" + file, x, y);
+				Board.setPiece(x, y, null);
+				Board.black.remove(this);
+				Queen yasQueen = new Queen(Color.BLACK, "queen" + file, x, y);
 				System.out.println("Pawn promoted!");
 			}
 		}
@@ -136,18 +121,18 @@ public abstract class Piece implements IChessPiece {
 		boolean isFirst = this.isFirstMove;
 
 		if (x >= 0 && y >= 0 && x <= 7 && y <= 7) {
-			other = board.getPiece(x, y);
+			other = Board.getPiece(x, y);
 			if (this.move(x, y, other) == 0) {
 				// captured piece set to original position
-				board.setPiece(x, y, other);
+				Board.setPiece(x, y, other);
 				// selected piece set to original position
-				board.setPiece(originX, originY, this);
+				Board.setPiece(originX, originY, this);
 				isFirstMove = isFirst;
 				if (other != null) {
 					if (other.getColor() == Color.WHITE) {
-						board.getWhite().add(other);
+						Board.white.add(other);
 					} else
-						board.getBlack().add(other);
+						Board.black.add(other);
 				}
 				return true;
 			}
@@ -161,7 +146,5 @@ public abstract class Piece implements IChessPiece {
 
 	public abstract String toString();
 
-	public boolean canMove() {
-		return this.moveStrategy.canMove(this);
-	};
+	public abstract boolean canMove();
 }
